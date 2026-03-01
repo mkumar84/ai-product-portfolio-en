@@ -1,45 +1,115 @@
 ---
 import { Icon } from "astro-icon";
+
+// Detect current page for active highlighting
+const current = Astro.url.pathname;
 ---
 
-<header class="w-full border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+<header class="w-full border-b border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md sticky top-0 z-50">
   <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-    
-    <!-- Logo -->
-    <a href="/" class="text-xl font-semibold text-gray-900">
-      MK
-    </a>
+
+    <!-- Left: Logo + Profile Photo -->
+    <div class="flex items-center space-x-3">
+      <img 
+        src="/profile.jpg" 
+        alt="Profile photo" 
+        class="w-10 h-10 rounded-full object-cover border border-gray-300 dark:border-gray-600"
+      />
+      <a href="/" class="text-xl font-semibold text-gray-900 dark:text-white">
+        MK
+      </a>
+    </div>
 
     <!-- Desktop Navigation -->
-    <div class="hidden md:flex space-x-8 text-gray-700 font-medium">
-      <a href="/" class="hover:text-black transition">Home</a>
-      <a href="/about" class="hover:text-black transition">About</a>
-      <a href="/projects" class="hover:text-black transition">Projects</a>
-      <a href="/skills" class="hover:text-black transition">Skills</a>
-      <a href="/contact" class="hover:text-black transition">Contact</a>
+    <div class="hidden md:flex items-center space-x-8 text-gray-700 dark:text-gray-300 font-medium">
+
+      <a href="/" class={`hover:text-black dark:hover:text-white transition ${current === "/" ? "font-semibold underline" : ""}`}>
+        Home
+      </a>
+
+      <a href="/about" class={`hover:text-black dark:hover:text-white transition ${current === "/about" ? "font-semibold underline" : ""}`}>
+        About
+      </a>
+
+      <a href="/projects" class={`hover:text-black dark:hover:text-white transition ${current === "/projects" ? "font-semibold underline" : ""}`}>
+        Projects
+      </a>
+
+      <a href="/skills" class={`hover:text-black dark:hover:text-white transition ${current === "/skills" ? "font-semibold underline" : ""}`}>
+        Skills
+      </a>
+
+      <a href="/contact" class={`hover:text-black dark:hover:text-white transition ${current === "/contact" ? "font-semibold underline" : ""}`}>
+        Contact
+      </a>
+
+      <!-- Dark Mode Toggle -->
+      <button id="theme-toggle" class="ml-4 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition">
+        <Icon name="heroicons:moon" class="w-6 h-6 hidden dark:block" />
+        <Icon name="heroicons:sun" class="w-6 h-6 dark:hidden" />
+      </button>
     </div>
 
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-button" class="md:hidden text-gray-700">
+    <button id="mobile-menu-button" class="md:hidden text-gray-700 dark:text-gray-300">
       <Icon name="heroicons:bars-3" class="w-7 h-7" />
     </button>
   </nav>
 
   <!-- Mobile Menu -->
-  <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-3 text-gray-700 font-medium">
-    <a href="/" class="block hover:text-black transition">Home</a>
-    <a href="/about" class="block hover:text-black transition">About</a>
-    <a href="/projects" class="block hover:text-black transition">Projects</a>
-    <a href="/skills" class="block hover:text-black transition">Skills</a>
-    <a href="/contact" class="block hover:text-black transition">Contact</a>
+  <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-3 text-gray-700 dark:text-gray-300 font-medium">
+
+    <a href="/" class={`block hover:text-black dark:hover:text-white transition ${current === "/" ? "font-semibold underline" : ""}`}>
+      Home
+    </a>
+
+    <a href="/about" class={`block hover:text-black dark:hover:text-white transition ${current === "/about" ? "font-semibold underline" : ""}`}>
+      About
+    </a>
+
+    <a href="/projects" class={`block hover:text-black dark:hover:text-white transition ${current === "/projects" ? "font-semibold underline" : ""}`}>
+      Projects
+    </a>
+
+    <a href="/skills" class={`block hover:text-black dark:hover:text-white transition ${current === "/skills" ? "font-semibold underline" : ""}`}>
+      Skills
+    </a>
+
+    <a href="/contact" class={`block hover:text-black dark:hover:text-white transition ${current === "/contact" ? "font-semibold underline" : ""}`}>
+      Contact
+    </a>
+
+    <!-- Dark Mode Toggle (Mobile) -->
+    <button id="theme-toggle-mobile" class="pt-3 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition">
+      <Icon name="heroicons:moon" class="w-6 h-6 hidden dark:block" />
+      <Icon name="heroicons:sun" class="w-6 h-6 dark:hidden" />
+    </button>
   </div>
 
+  <!-- Scripts -->
   <script>
+    // Mobile menu toggle
     const btn = document.getElementById("mobile-menu-button");
     const menu = document.getElementById("mobile-menu");
+    btn.addEventListener("click", () => menu.classList.toggle("hidden"));
 
-    btn.addEventListener("click", () => {
-      menu.classList.toggle("hidden");
+    // Dark mode toggle
+    const toggleButtons = [
+      document.getElementById("theme-toggle"),
+      document.getElementById("theme-toggle-mobile")
+    ];
+
+    toggleButtons.forEach(btn => {
+      if (!btn) return;
+      btn.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+        localStorage.theme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+      });
     });
+
+    // Load saved theme
+    if (localStorage.theme === "dark") {
+      document.documentElement.classList.add("dark");
+    }
   </script>
 </header>
