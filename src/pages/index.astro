@@ -1,17 +1,23 @@
 ---
-import { SITE_CONTENT } from "@config";
-import Hero from "@components/Hero.astro";
-import Layout from "@layouts/Layout.astro";
-import Experience from "@components/Experience.astro";
-import Projects from "@components/Projects.astro";
-import About from "@components/About.astro";
-
-import "../styles/global.css";
+import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout>
-  <Hero {...SITE_CONTENT.hero} />
-  <Experience experience={SITE_CONTENT.experience} />
-  <Projects projects={SITE_CONTENT.projects} />
-  <About {...SITE_CONTENT.about} name={SITE_CONTENT.hero.name} />
+<Layout title="Mahesh Kumar – AI, Data & Product Leader">
+  <section class="py-32 text-center max-w-3xl mx-auto">
+    <h1 class="text-5xl font-bold text-gray-900 mb-6">
+      AI, Data & Product Leader
+    </h1>
+
+    <p class="text-xl text-gray-600 mb-4">
+      Building insight‑driven AI products for financial services and risk‑driven organizations.
+    </p>
+
+    <p class="text-lg text-gray-500 mb-10">
+      17+ years of experience turning complex business and risk problems into scalable AI‑enabled products.
+    </p>
+
+    <a href="/projects" class="inline-block px-6 py-3 bg-black text-white rounded-lg text-lg font-medium hover:bg-gray-800 transition">
+      View My Work
+    </a>
+  </section>
 </Layout>
