@@ -1,111 +1,45 @@
 ---
-import Menu from "@icons/Menu.astro";
-import { Image } from "astro:assets";
-import type { HeaderProps } from "@types";
-
-type Props = HeaderProps;
-
-const { siteLogo, navLinks } = Astro.props;
+import { Icon } from "astro-icon";
 ---
 
-<header
-  class="sticky top-0 z-50 mx-auto flex max-w-5xl animate-slide-in justify-between bg-black px-5 py-6"
->
-  <a href="/" aria-label="Home link">
-    <Image
-      class="rounded-full"
-      src={siteLogo}
-      width="45"
-      height="45"
-      alt="website logo"
-    />
-  </a>
+<header class="w-full border-b border-gray-200 bg-white/80 backdrop-blur-md sticky top-0 z-50">
+  <nav class="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    
+    <!-- Logo -->
+    <a href="/" class="text-xl font-semibold text-gray-900">
+      MK
+    </a>
 
-  <button
-    type="button"
-    id="menu-button"
-    class="px-1.5 text-neutral sm:hidden"
-    aria-expanded="false"
-    aria-controls="main-menu"
-  >
-    <Menu />
-  </button>
+    <!-- Desktop Navigation -->
+    <div class="hidden md:flex space-x-8 text-gray-700 font-medium">
+      <a href="/" class="hover:text-black transition">Home</a>
+      <a href="/about" class="hover:text-black transition">About</a>
+      <a href="/projects" class="hover:text-black transition">Projects</a>
+      <a href="/skills" class="hover:text-black transition">Skills</a>
+      <a href="/contact" class="hover:text-black transition">Contact</a>
+    </div>
 
-  <nav
-    class="absolute top-20 right-5 hidden rounded-xl border border-neutral/40 bg-black px-4 py-5 text-neutral sm:static sm:block sm:border-0 sm:bg-transparent sm:p-0"
-    id="main-menu"
-  >
-    <ul class="gap-2 sm:flex">
-      {
-        navLinks.map((link) => (
-          <li class="relative">
-            <a
-              class={`nav-item relative block p-2 text-sm font-medium transition-all duration-500 after:absolute after:bottom-0 after:left-2/4 after:h-2 after:w-1 after:-translate-x-2/4 after:text-primary after:opacity-0 after:content-['•'] hover:text-white`}
-              href={link.href}
-            >
-              {link.text}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-button" class="md:hidden text-gray-700">
+      <Icon name="heroicons:bars-3" class="w-7 h-7" />
+    </button>
   </nav>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu" class="md:hidden hidden px-6 pb-4 space-y-3 text-gray-700 font-medium">
+    <a href="/" class="block hover:text-black transition">Home</a>
+    <a href="/about" class="block hover:text-black transition">About</a>
+    <a href="/projects" class="block hover:text-black transition">Projects</a>
+    <a href="/skills" class="block hover:text-black transition">Skills</a>
+    <a href="/contact" class="block hover:text-black transition">Contact</a>
+  </div>
+
+  <script>
+    const btn = document.getElementById("mobile-menu-button");
+    const menu = document.getElementById("mobile-menu");
+
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+    });
+  </script>
 </header>
-
-<script>
-  // Toggle mobile menu
-  const button = document.querySelector("#menu-button");
-  const menu = document.querySelector("#main-menu");
-  const navItems = document.querySelectorAll("#main-menu > ul > li > a");
-
-  const toggleMenu = () => {
-    menu?.classList.toggle("hidden");
-    const isHidden = menu?.classList.contains("hidden");
-    button?.setAttribute("aria-expanded", `${!isHidden}`);
-  };
-
-  button?.addEventListener("click", toggleMenu);
-  navItems.forEach((item) => {
-    item?.addEventListener("click", toggleMenu);
-  });
-
-  // Update navigation based on scroll position with Intersection Observer
-  const observer = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          navItems.forEach((item) => {
-            if (item.getAttribute("href") === `#${entry.target.id}`) {
-              item.classList.add("text-white", "md:after:opacity-100");
-            } else {
-              item.classList.remove("text-white", "md:after:opacity-100");
-            }
-          });
-        }
-      });
-    },
-    { threshold: 0.5 },
-  );
-
-  document.querySelectorAll("section").forEach((section) => {
-    observer.observe(section);
-  });
-
-  // Cleanup observer
-  document.onvisibilitychange = () => {
-    if (document.visibilityState === "hidden") {
-      observer.disconnect();
-    } else {
-      document.querySelectorAll("section").forEach((section) => {
-        observer.observe(section);
-      });
-    }
-  };
-</script>
-
-<style>
-  header {
-    animation-timeline: scroll();
-    animation-range: 0 650px;
-  }
-</style>
