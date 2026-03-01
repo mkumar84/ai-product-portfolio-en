@@ -1,7 +1,10 @@
 ---
-import { Icon } from "astro-icon";
-
-// Detect current page for active highlighting
+/**
+ * Header.astro (no astro-icon)
+ * - Mobile menu toggle (safe null checks)
+ * - Dark mode toggle (desktop + mobile) with persistence
+ * - Active link highlighting using Astro.url.pathname
+ */
 const current = Astro.url.pathname;
 ---
 
@@ -50,8 +53,16 @@ const current = Astro.url.pathname;
         class="ml-4 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
         aria-label="Toggle dark mode"
       >
-        <Icon name="heroicons:moon" class="w-6 h-6 hidden dark:block" />
-        <Icon name="heroicons:sun" class="w-6 h-6 dark:hidden" />
+        <!-- Moon (shown in dark mode) -->
+        <svg class="w-6 h-6 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+
+        <!-- Sun (shown in light mode) -->
+        <svg class="w-6 h-6 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636" />
+          <circle cx="12" cy="12" r="4" />
+        </svg>
       </button>
     </div>
 
@@ -64,7 +75,9 @@ const current = Astro.url.pathname;
       aria-expanded="false"
       aria-controls="mobile-menu"
     >
-      <Icon name="heroicons:bars-3" class="w-7 h-7" />
+      <svg class="w-7 h-7" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
     </button>
   </nav>
 
@@ -100,16 +113,23 @@ const current = Astro.url.pathname;
       class="pt-3 text-gray-700 dark:text-gray-300 hover:text-black dark:hover:text-white transition"
       aria-label="Toggle dark mode"
     >
-      <Icon name="heroicons:moon" class="w-6 h-6 hidden dark:block" />
-      <Icon name="heroicons:sun" class="w-6 h-6 dark:hidden" />
+      <!-- Moon (shown in dark mode) -->
+      <svg class="w-6 h-6 hidden dark:block" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+      </svg>
+
+      <!-- Sun (shown in light mode) -->
+      <svg class="w-6 h-6 dark:hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v2m0 14v2m9-9h-2M5 12H3m15.364-6.364-1.414 1.414M7.05 16.95l-1.414 1.414m12.728 0-1.414-1.414M7.05 7.05 5.636 5.636" />
+        <circle cx="12" cy="12" r="4" />
+      </svg>
     </button>
   </div>
 
-  <!-- Scripts -->
   <script is:inline>
     // --- Mobile menu toggle ---
-    const mobileBtn = document.querySelector<HTMLButtonElement>("#mobile-menu-button");
-    const mobileMenu = document.querySelector<HTMLElement>("#mobile-menu");
+    const mobileBtn = document.querySelector("#mobile-menu-button");
+    const mobileMenu = document.querySelector("#mobile-menu");
 
     if (mobileBtn && mobileMenu) {
       mobileBtn.addEventListener("click", () => {
@@ -121,32 +141,23 @@ const current = Astro.url.pathname;
 
     // --- Theme helpers ---
     const setTheme = (theme) => {
-      if (theme === "dark") {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-      }
-      try {
-        localStorage.theme = theme;
-      } catch {}
+      if (theme === "dark") document.documentElement.classList.add("dark");
+      else document.documentElement.classList.remove("dark");
+
+      try { localStorage.theme = theme; } catch {}
     };
 
     const getInitialTheme = () => {
       try {
-        if (localStorage.theme === "dark" || localStorage.theme === "light") {
-          return localStorage.theme;
-        }
+        if (localStorage.theme === "dark" || localStorage.theme === "light") return localStorage.theme;
       } catch {}
-      // fallback: system preference
-      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
+      return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     };
 
-    // Apply saved theme on load
+    // Apply theme on load
     setTheme(getInitialTheme());
 
-    // --- Dark mode toggle buttons (desktop + mobile) ---
+    // Toggle buttons (desktop + mobile)
     const toggleButtons = [
       document.getElementById("theme-toggle"),
       document.getElementById("theme-toggle-mobile"),
