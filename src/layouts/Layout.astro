@@ -1,52 +1,53 @@
 ---
-import Header from "@components/Header.astro";
-import "@fontsource/be-vietnam-pro";
-import "@fontsource-variable/gabarito";
-import { SITE_CONFIG } from "@config";
 import Footer from "@components/Footer.astro";
+import { SITE_CONFIG } from "@config";
+
+// IMPORTANT: load your global styles (Tailwind)
+import "../styles/global.css";
 
 const {
   title,
   description,
-  siteLogo,
-  navLinks,
   lang,
   author,
   socialLinks,
-  socialImage,
   canonicalURL = new URL(Astro.url.pathname, Astro.site).href,
 } = SITE_CONFIG;
-
-const ogImgUrl = canonicalURL + socialImage;
 ---
 
 <!doctype html>
-<html lang={lang} class="scroll-pt-16 scroll-smooth">
+<html lang={lang ?? "en"}>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="description" content={description} />
-    <meta name="author" content={author} />
-    <meta name="viewport" content="width=device-width" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="generator" content={Astro.generator} />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
     <title>{title}</title>
+    <meta name="description" content={description} />
 
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonicalURL} />
-    <meta property="og:image" content={ogImgUrl} />
-
-    <meta property="twitter:card" content="summary_large_image" />
-    <meta property="twitter:url" content={canonicalURL} />
-    <meta property="twitter:title" content={title} />
-    <meta property="twitter:description" content={description} />
-    <meta property="twitter:image" content={ogImgUrl} />
+    <link rel="canonical" href={canonicalURL} />
   </head>
-  <body class="bg-black font-sans">
-    <Header siteLogo={siteLogo} navLinks={navLinks} />
-    <main class="mx-auto max-w-3xl px-5">
+
+  <body class="min-h-screen bg-black text-white">
+    <header class="sticky top-0 z-50 border-b border-white/10 bg-black/70 backdrop-blur">
+      <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+        <a href="/" class="text-sm font-semibold tracking-tight">
+          {author}
+        </a>
+
+        <div class="flex items-center gap-4 text-sm text-white/80">
+          <a class="hover:text-white" href="/#experience">Experience</a>
+          <a class="hover:text-white" href="/projects">Projects</a>
+          <a class="hover:text-white" href="/about">About</a>
+        </div>
+      </nav>
+    </header>
+
+    <main class="mx-auto max-w-5xl px-5 py-10">
       <slot />
     </main>
-    <Footer author={author} socialLinks={socialLinks} />
+
+    <footer class="mx-auto max-w-5xl px-5 pb-10">
+      <Footer author={author} socialLinks={socialLinks} />
+    </footer>
   </body>
 </html>
