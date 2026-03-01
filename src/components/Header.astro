@@ -87,11 +87,17 @@ const current = Astro.url.pathname;
   </div>
 
   <!-- Scripts -->
-  <script>
-    // Mobile menu toggle
-    const btn = document.getElementById("mobile-menu-button");
-    const menu = document.getElementById("mobile-menu");
-    btn.addEventListener("click", () => menu.classList.toggle("hidden"));
+<script is:inline>
+  const btn = document.querySelector<HTMLButtonElement>("#menu-btn");
+  const menu = document.querySelector<HTMLElement>("#menu");
+
+  if (btn && menu) {
+    btn.addEventListener("click", () => {
+      menu.classList.toggle("hidden");
+      btn.setAttribute("aria-expanded", String(!menu.classList.contains("hidden")));
+    });
+  }
+</script>
 
     // Dark mode toggle
     const toggleButtons = [
