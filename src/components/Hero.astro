@@ -1,7 +1,8 @@
 ---
 import type { HeroProps } from "@types";
+import { SITE_CONTENT } from "../config";
 
-const { name, specialty, summary, email } = Astro.props as HeroProps;
+const { name, specialty, summary, email }: HeroProps = SITE_CONTENT.hero;
 ---
 
 <section class="py-24 md:py-32" id="hero">
