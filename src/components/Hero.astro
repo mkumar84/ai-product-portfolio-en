@@ -1,5 +1,27 @@
-<section class="hero bg-gray-800 text-white p-8">
-  <h1 class="text-4xl font-bold mb-4">Welcome to AI Product</h1>
-  <p class="text-white mb-2">We specialize in...</p>
-  <p class="text-gray-200 mb-2">Some improvements to make the summary text more readable...</p>
+---
+import type { HeroProps } from "@types";
+import { SITE_CONTENT } from "../config";
+
+const { name, specialty, summary, email }: HeroProps = SITE_CONTENT.hero;
+---
+
+<section class="py-24 md:py-32" id="hero">
+  <h1 class="mb-2 font-serif text-6xl font-bold tracking-tight text-white sm:text-7xl md:mb-1 md:text-8xl">
+    {name}
+  </h1>
+
+  <p class="mb-8 font-serif text-3xl leading-tight font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
+    {specialty}
+  </p>
+
+  <p class="mb-14 max-w-3xl text-base font-normal text-gray-100 md:text-lg">
+    {summary}
+  </p>
+
+  <a
+    class="inline-block rounded-full bg-primary px-8 py-5 text-sm leading-5 font-medium text-white hover:opacity-90 transition"
+    href={`mailto:${email}`}
+  >
+    Get in Touch
+  </a>
 </section>
